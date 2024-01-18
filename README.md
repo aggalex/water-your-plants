@@ -1,3 +1,3 @@
-# Encode anything to morse code
+# Water your plants
 
-That's all it does. It uses a raspberry PI GPIO. It only exists for fun and educational purposes.
+A centralized service for monitoring and watering your greens. Uses MQTT and HTTP for communication

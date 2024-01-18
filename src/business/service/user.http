@@ -1,0 +1,31 @@
+POST 127.0.0.1:8000/user
+Content-Type: application/json
+
+{
+  "username": "aggelalex",
+  "password": "123456789"
+}
+
+###
+
+POST 127.0.0.1:8000/user/login
+Content-Type: application/json
+
+{
+  "username": "aggelalex",
+  "password": "123456789"
+}
+
+###
+
+POST 127.0.0.1:8000/user/logout
+Content-Type: application/json
+
+###
+
+GET 127.0.0.1:8000/user
+Content-Type: application/json
+
+###
+
+DELETE 127.0.0.1:8000/user
