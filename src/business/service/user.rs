@@ -70,7 +70,7 @@ pub async fn register(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_ja
 
     let login_dto = UserLoginDto { password, ..login_dto.0 };
 
-    let user_info = user_dao.create_user(&login_dto).await.map_err(Into::into)?;
+    let user_info = user_dao.create(&login_dto).await.map_err(Into::into)?;
 
     tx.commit().await.map_err(Into::into)?;
 
@@ -96,7 +96,7 @@ pub async fn delete_user(user: Login, db: &State<Pool>, cookie_jar: &CookieJar<'
     let tx = manager.as_mut().get_transaction().await?;
     let user_dao = UsersDao::from(&tx);
 
-    user_dao.delete_user(user.id).await.map_err(Into::into)?;
+    user_dao.delete(user.id).await.map_err(Into::into)?;
 
     cookie_jar.get("auth").map(|c| cookie_jar.remove(c.clone()));
 

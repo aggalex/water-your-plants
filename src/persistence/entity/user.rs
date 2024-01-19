@@ -43,14 +43,14 @@ impl UsersDao<'_> {
             .await.map_err(Into::into).and_then(FullUserInfoDto::try_from_opt_row)
     }
 
-    pub async fn create_user(&self, user_register: &UserLoginDto) -> QueryResult<FullUserInfoDto> {
+    pub async fn create(&self, user_register: &UserLoginDto) -> QueryResult<FullUserInfoDto> {
         self.0.query_one(r#"INSERT INTO "user"(username, password) VALUES ($1, $2) RETURNING *"#, &[
             &user_register.username,
             &user_register.password
         ]).await.map_err(Into::into).and_then(FullUserInfoDto::try_from_row_owned)
     }
 
-    pub async fn delete_user(&self, id: i32) -> QueryResult<()> {
+    pub async fn delete(&self, id: i32) -> QueryResult<()> {
         self.0.query(r#"DELETE FROM "user" WHERE id = $1"#, &[&id])
             .await.map_err(Into::into).map(|_| ())
     }
