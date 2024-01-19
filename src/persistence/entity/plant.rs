@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use postgres_from_row::FromRow;
 use uuid::Uuid;
 use crate::persistence::{FromRowExtension, QueryResult, Transaction};
-use crate::persistence::entity::user::FullUserInfoDto;
+
 
 #[derive(Clone, FromRow)]
 pub struct PlantDto {

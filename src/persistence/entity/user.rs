@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+
 use deadpool_postgres::GenericClient;
 use derive_more::From;
 use postgres_from_row::FromRow;

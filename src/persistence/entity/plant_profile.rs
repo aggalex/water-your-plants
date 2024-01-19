@@ -1,7 +1,7 @@
 use deadpool_postgres::GenericClient;
 use postgres_from_row::FromRow;
 use rocket::serde::{Deserialize, Serialize};
-use crate::persistence::entity::plant::PlantDto;
+
 use crate::persistence::{FromRowExtension, QueryResult, Transaction};
 
 #[derive(Clone, FromRow, Serialize)]

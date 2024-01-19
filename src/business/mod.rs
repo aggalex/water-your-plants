@@ -1,7 +1,7 @@
-use std::ops::{Deref, DerefMut};
+
 use deadpool_postgres::Manager;
 use rocket::http::Status;
-use rocket::request::FromRequest;
+
 use crate::persistence::{Error, Transaction};
 
 pub mod service;

@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
 use deadpool_postgres::GenericClient;
 use postgres_from_row::FromRow;
-use tokio_postgres::Row;
+
 use uuid::Uuid;
 use crate::persistence::{FromRowExtension, QueryResult, Transaction};
-use crate::persistence::entity::user::FullUserInfoDto;
+
 
 #[derive(FromRow)]
 pub struct LoginDTO {

@@ -1,10 +1,9 @@
 use std::ops::Deref;
 use deadpool_postgres::Pool;
 use rocket::{delete, get, post, serde::json::Json, State};
-use rocket::futures::{FutureExt, TryFutureExt};
 use rocket::http::{Cookie, CookieJar, Status};
-use rocket::outcome::IntoOutcome;
-use rocket::request::FromRequest;
+
+
 use uuid::Uuid;
 use crate::business::DbExtensions;
 use crate::business::middleware::login::Login;
@@ -53,7 +52,7 @@ pub async fn logout(user: Login, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -
 }
 
 #[post("/user", data = "<login_dto>")]
-pub async fn register(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -> Result<Json<i32>, Status> {
+pub async fn register(login_dto: Json<UserLoginDto>, db: &State<Pool>, _cookie_jar: &CookieJar<'_>) -> Result<Json<i32>, Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
     let user_dao = UsersDao::from(&tx);

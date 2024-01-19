@@ -1,11 +1,10 @@
 pub mod entity;
 mod query_builder;
 
-use std::fmt::Display;
-use std::ops::{Deref, DerefMut};
+
+use std::ops::{Deref};
 use deadpool_postgres::{CreatePoolError, GenericClient, Manager, ManagerConfig, Pool, PoolError, RecyclingMethod};
 use postgres_from_row::FromRow;
-use rocket::http::hyper::body::HttpBody;
 use tokio_postgres::{NoTls, Row};
 
 pub async fn connect() -> Result<Pool, CreatePoolError> {

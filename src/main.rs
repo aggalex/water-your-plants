@@ -16,8 +16,8 @@ extern crate serde_json;
 #[macro_use]
 extern crate derive_more;
 
-use deadpool_postgres::Pool;
-use rocket::{Rocket, routes, State};
+
+
 use crate::business::service::http;
 use crate::persistence::connect;
 
