@@ -15,8 +15,8 @@ use crate::persistence::entity::user::{UserInfoDto, UserLoginDto, UsersDao};
 pub async fn login(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -> Result<(), Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
-    let mut user_dao = UsersDao::from(&tx);
-    let mut login_dao = LoginDao::from(&tx);
+    let user_dao = UsersDao::from(&tx);
+    let login_dao = LoginDao::from(&tx);
 
     if !cookie_jar.get_private("auth").is_none() {
         return Err(Status::BadRequest)
@@ -43,7 +43,7 @@ pub async fn login(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_jar: 
 pub async fn logout(user: Login, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -> Result<(), Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
-    let mut login_dao = LoginDao::from(&tx);
+    let login_dao = LoginDao::from(&tx);
 
     login_dao.logout(&user.key).await.map_err(Into::into)?;
 
@@ -56,7 +56,7 @@ pub async fn logout(user: Login, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -
 pub async fn register(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -> Result<Json<i32>, Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
-    let mut user_dao = UsersDao::from(&tx);
+    let user_dao = UsersDao::from(&tx);
 
     let None = user_dao.find_by_username(&login_dto.username).await.map_err(Into::into)? else {
         return Err(Status::BadRequest);
@@ -81,7 +81,7 @@ pub async fn register(login_dto: Json<UserLoginDto>, db: &State<Pool>, cookie_ja
 pub async fn display_info(user: Login, db: &State<Pool>) -> Result<Json<UserInfoDto>, Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
-    let mut user_dao = UsersDao::from(&tx);
+    let user_dao = UsersDao::from(&tx);
 
     let Some(info) = user_dao.find_display_info_by_id(user.id).await.map_err(Into::into)? else {
         return Err(Status::BadRequest)
@@ -94,7 +94,7 @@ pub async fn display_info(user: Login, db: &State<Pool>) -> Result<Json<UserInfo
 pub async fn delete_user(user: Login, db: &State<Pool>, cookie_jar: &CookieJar<'_>) -> Result<(), Status> {
     let mut manager = db.deref().get().await;
     let tx = manager.as_mut().get_transaction().await?;
-    let mut user_dao = UsersDao::from(&tx);
+    let user_dao = UsersDao::from(&tx);
 
     user_dao.delete_user(user.id).await.map_err(Into::into)?;
 
