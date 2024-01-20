@@ -23,6 +23,7 @@ use crate::business::mqtt_service::Mqtt;
 
 #[rocket::main]
 async fn main() {
+    dotenv::dotenv().unwrap();
     let db = db::get().await.clone();
     let mut mqtt = Mqtt::new();
     let http_handle = tokio::spawn(http(db::get().await.clone(), mqtt.listener.connection().clone()));
