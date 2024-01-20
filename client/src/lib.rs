@@ -26,18 +26,29 @@ pub enum MeasurementDTO {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ClientEvent<T: Serialize> {
+    pub uuid: String,
+    pub event: T
+}
+
+#[cfg(feature = "bin")]
+impl<T: Serialize> ClientEvent<T> {
+    pub async fn from(value: T) -> ClientEvent<T> {
+        ClientEvent {
+            uuid: uuid().await,
+            event: value,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct WaterRequestDTO {
     pub uuid: String,
     pub duration: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
-pub struct UpdateCredentialsDTO {
-    pub token: String
-}
-
-impl PublishEvent for MeasurementDTO {
+impl PublishEvent for ClientEvent<MeasurementDTO> {
     type Response = ();
     const TOPIC: &'static str = "/plant/measurement";
 }
@@ -45,9 +56,4 @@ impl PublishEvent for MeasurementDTO {
 impl PublishEvent for WaterRequestDTO {
     type Response = ();
     const TOPIC: &'static str = "/plant/water";
-}
-
-impl PublishEvent for UpdateCredentialsDTO {
-    type Response = ();
-    const TOPIC: &'static str = "/auth/update";
 }

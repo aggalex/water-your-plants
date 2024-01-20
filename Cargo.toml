@@ -13,7 +13,7 @@ chrono = { version = "0.4.31", features = ["serde"] }
 serde_json = "1.0.111"
 tokio = "1.35.1"
 tokio-stream = "0.1.14"
-monadic-mqtt = { git = "https://github.com/aggalex/monadic-mqtt" }
+monadic-mqtt = { git = "https://github.com/aggalex/monadic-mqtt", branch = "feature/async_subscriber" }
 serde = { version = "1.0.195", features = ["derive"] }
 log = "0.4.20"
 tokio-postgres = { version = "0.7.10", features = ["with-chrono-0_4"] }
@@ -24,3 +24,6 @@ derive_more = { version = "1.0.0-beta.6", features = ["full"] }
 rocket = { version = "0.5.0", features = ["secrets", "serde_json", "json", "rmp-serde"] }
 uuid = { version = "1.6.1", features = ["v4"] }
 bcrypt = "0.15.0"
+lazy_static = "1.4.0"
+rumqttc = "0.23.0"
+client = { path = "client" }

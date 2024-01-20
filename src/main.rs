@@ -3,6 +3,7 @@
 
 pub mod business;
 pub mod persistence;
+pub mod db;
 
 // extern crate dothyphen;
 // extern crate futures;
@@ -16,19 +17,15 @@ extern crate serde_json;
 #[macro_use]
 extern crate derive_more;
 
-
-
-use crate::business::service::http;
-use crate::persistence::connect;
+use crate::business::http_service::http;
+use db::connect;
+use crate::business::mqtt_service::Mqtt;
 
 #[rocket::main]
 async fn main() {
-    let db = connect().await.unwrap();
-
-    tokio::spawn({
-        let db = db.clone();
-        business::r#data::dump(db)
-    });
-
-    http(db).await;
+    let db = db::get().await.clone();
+    let mut mqtt = Mqtt::new();
+    let http_handle = tokio::spawn(http(db::get().await.clone(), mqtt.listener.connection().clone()));
+    let mqtt_handle = tokio::spawn(async move { mqtt.listen().await });
+    tokio::join!(http_handle, mqtt_handle);
 }

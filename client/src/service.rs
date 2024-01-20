@@ -3,7 +3,7 @@ use std::time::Duration;
 use monadic_mqtt::mqtt::event::{PublishEvent, SubscribeEvent};
 use rppal::{gpio, spi};
 use rppal::hal::Delay;
-use crate::{context, Error, MeasurementDTO, UpdateCredentialsDTO, WaterRequestDTO};
+use crate::{ClientEvent, context, Error, MeasurementDTO, WaterRequestDTO};
 use crate::context::hardware;
 impl From<gpio::Error> for Error {
     fn from(_: gpio::Error) -> Self {
@@ -61,18 +61,9 @@ pub fn measure() -> Result<MeasurementDTO, Error> {
 
 pub async fn measurement_service(conn: monadic_mqtt::mqtt::Connection) {
     loop {
-        measure().unwrap_or_else(|e| MeasurementDTO::Error(e)).publish(conn.clone()).await
+        ClientEvent::from(measure().unwrap_or_else(|e| MeasurementDTO::Error(e))).await
+            .publish(conn.clone()).await
             .unwrap_or_else(|e| eprintln!("Unable to publish measurement: {:?}", e));
         tokio::time::sleep(Duration::from_secs(1)).await;
-    }
-}
-
-impl SubscribeEvent for UpdateCredentialsDTO {
-    fn invoke(&self) -> impl Future<Output=Result<Self::Response, Self::Error>> + Send {
-        let token = self.token.clone();
-        async {
-            context::set_uuid(token).await;
-            Ok(())
-        }
     }
 }

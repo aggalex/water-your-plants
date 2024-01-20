@@ -1,29 +1,9 @@
-
-use deadpool_postgres::Manager;
 use rocket::http::Status;
 
-use crate::persistence::{Error, Transaction};
+use crate::persistence::Error;
 
-pub mod service;
-pub(self) mod middleware;
+pub mod http_service;
 pub mod r#data;
-
-pub(self) trait DbExtensions<'a> {
-    async fn get_transaction(self) -> Result<Transaction<'a>, Status>;
-}
-
-impl<'a, E> DbExtensions<'a> for Result<&'a mut deadpool::managed::Object<Manager>, E> {
-    async fn get_transaction(self) -> Result<Transaction<'a>, Status> {
-        match self {
-            Ok(manager) => Transaction::new(manager).await.map_err(|_| Status::InternalServerError),
-            Err(_) => Err(Status::InternalServerError)
-        }
-    }
-}
-
-impl Into<Status> for Error {
-    fn into(self) -> Status {
-        eprintln!("   >> DB Error: {:?}", self);
-        Status::InternalServerError
-    }
-}
+pub mod mqtt_service;
+pub mod manager;
+pub mod cdi;

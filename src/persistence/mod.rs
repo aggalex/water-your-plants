@@ -2,34 +2,23 @@ pub mod entity;
 mod query_builder;
 
 
-use std::ops::{Deref};
-use deadpool_postgres::{CreatePoolError, GenericClient, Manager, ManagerConfig, Pool, PoolError, RecyclingMethod};
+use std::ops::Deref;
+use deadpool::managed::Object;
+use deadpool_postgres::{GenericClient, Manager, PoolError};
 use postgres_from_row::FromRow;
-use tokio_postgres::{NoTls, Row};
-
-pub async fn connect() -> Result<Pool, CreatePoolError> {
-    deadpool_postgres::Config {
-        host: Some("localhost".to_string()),
-        user: Some("postgres".to_string()),
-        password: Some("12341234".to_string()),
-        dbname: Some("irrigate".to_string()),
-        manager: Some(ManagerConfig {
-            recycling_method: RecyclingMethod::Fast
-        }),
-        ..deadpool_postgres::Config::new()
-    }.create_pool(None, NoTls)
-}
+use tokio_postgres::Row;
 
 #[derive(Debug, From)]
 pub enum Error {
     Pool(PoolError),
-    Postgres(tokio_postgres::Error)
+    Postgres(tokio_postgres::Error),
+    Sync
 }
 
 pub struct Transaction<'a> (deadpool_postgres::Transaction<'a>);
 
 impl<'a> Transaction<'a> {
-    pub async fn new(manager: &'a mut deadpool::managed::Object<Manager>) -> Result<Self, Error> {
+    pub async fn new(manager: &'a mut Object<Manager>) -> Result<Self, Error> {
         manager.transaction().await.map(Transaction).map_err(Into::into)
     }
 

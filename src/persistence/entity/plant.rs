@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use postgres_from_row::FromRow;
+use rocket::serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::persistence::{FromRowExtension, QueryResult, Transaction};
 
 
-#[derive(Clone, FromRow)]
+#[derive(Clone, FromRow, Serialize)]
 pub struct PlantDto {
     pub id: i32,
     pub name: String,
@@ -14,6 +15,7 @@ pub struct PlantDto {
     pub soil_moisture: f32,
 }
 
+#[derive(Deserialize)]
 #[derive(Clone, FromRow)]
 pub struct NewPlantDto {
     pub name: String,
@@ -29,8 +31,8 @@ impl PlantDao<'_> {
             .await.map_err(Into::into).and_then(PlantDto::try_from_opt_row)
     }
 
-    pub async fn update_moisture(&self, id: i32, moisture: f32) -> QueryResult<Option<PlantDto>> {
-        self.0.query_opt(r#"UPDATE plant SET soil_moisture = $2 WHERE id = $1 RETURNING *"#, &[&id, &moisture])
+    pub async fn update_moisture(&self, uuid: &str, moisture: f32) -> QueryResult<Option<PlantDto>> {
+        self.0.query_opt(r#"UPDATE plant SET soil_moisture = $2 WHERE uuid = $1 RETURNING *"#, &[&uuid, &moisture])
             .await.map_err(Into::into).and_then(PlantDto::try_from_opt_row)
     }
 
