@@ -23,8 +23,6 @@ pub async fn connect() -> Result<Pool, CreatePoolError> {
 async fn init() -> Pool {
     let db = connect().await.unwrap();
 
-    DB.set(db.clone()).unwrap();
-
     tokio::spawn({
         let db = db.clone();
         business::r#data::dump(db)
