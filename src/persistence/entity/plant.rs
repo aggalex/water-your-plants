@@ -1,7 +1,7 @@
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::dto::PaginationDto;
-use crate::persistence::entity::plant_profile::PlantProfileDto;
+
 use crate::persistence::{FromRowExtension, FromRowsExtension, QueryResult, Transaction};
 use chrono::{DateTime, Utc};
 use postgres_from_row::FromRow;

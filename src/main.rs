@@ -19,12 +19,12 @@ extern crate derive_more;
 
 use crate::business::http_service::http;
 use crate::business::mqtt_service::Mqtt;
-use db::connect;
+
 
 #[rocket::main]
 async fn main() {
     dotenv::dotenv().unwrap();
-    let db = db::get().await.clone();
+    let _db = db::get().await.clone();
     let mut mqtt = Mqtt::new();
     let http_handle = tokio::spawn(http(
         db::get().await.clone(),

@@ -1,9 +1,9 @@
-use crate::business::cdi::GlobalContext;
-use crate::persistence::Transaction;
+
+
 use deadpool_postgres::Pool;
 use monadic_mqtt::mqtt::Connection;
-use rocket::request::FromRequest;
-use rocket::{routes, Rocket};
+
+use rocket::{Rocket};
 
 pub mod middleware;
 mod plant;

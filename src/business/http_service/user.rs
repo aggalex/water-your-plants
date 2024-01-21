@@ -1,17 +1,17 @@
 use deadpool_postgres::Pool;
-use rocket::http::{Cookie, CookieJar, Status};
+use rocket::http::{Cookie, CookieJar};
 use rocket::{delete, get, post, routes, serde::json::Json, Route, State};
-use std::ops::Deref;
+
 
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::user_manager::UserManager;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::login::LoginDao;
-use crate::persistence::entity::user::{UserInfoDto, UserLoginDto, UsersDao};
+
+use crate::persistence::entity::user::{UserInfoDto, UserLoginDto};
 use crate::persistence::Transaction;
-use uuid::Uuid;
+
 
 fn logout_cookie(cookie_jar: &CookieJar<'_>) {
     cookie_jar.get("auth").map(|c| cookie_jar.remove(c.clone()));
@@ -24,7 +24,7 @@ async fn login(
     cookie_jar: &CookieJar<'_>,
 ) -> Result<(), ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let auth_key = cookie_jar
         .get_private("auth")
@@ -45,7 +45,7 @@ async fn logout(
     cookie_jar: &CookieJar<'_>,
 ) -> Result<(), ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let user_manager: UserManager = context.inject();
     user_manager.logout(user).await?;
@@ -61,7 +61,7 @@ async fn register(
     db: &State<Pool>,
 ) -> Result<Json<i32>, ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let user_manager: UserManager = context.inject();
     let info = user_manager.register(login_dto.0).await?;
@@ -75,7 +75,7 @@ async fn display_info(
     db: &State<Pool>,
 ) -> Result<Json<UserInfoDto>, ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let user_manager: UserManager = context.inject();
     let info = user_manager.get_user_info(user).await?;
@@ -87,10 +87,10 @@ async fn display_info(
 async fn delete_user(
     user: LoggedInUserDTO,
     db: &State<Pool>,
-    cookie_jar: &CookieJar<'_>,
+    _cookie_jar: &CookieJar<'_>,
 ) -> Result<(), ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let user_manager: UserManager = context.inject();
     user_manager.delete(user).await?;

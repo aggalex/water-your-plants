@@ -2,11 +2,11 @@ use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::{GlobalContext, Injects};
 use crate::business::dto::PaginationDto;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
-use crate::business::manager::plant_profile_manager::PlantProfileManager;
+
 use crate::business::manager::ErrorResponse;
 use crate::persistence::entity::plant::{NewPlantDto, PlantDao, PlantDto};
 use crate::persistence::entity::plant_profile::PlantProfileDao;
-use crate::persistence::Transaction;
+
 use client::{MeasurementDTO, WaterRequestDTO};
 use monadic_mqtt::mqtt::event::PublishEvent;
 use monadic_mqtt::mqtt::Connection;

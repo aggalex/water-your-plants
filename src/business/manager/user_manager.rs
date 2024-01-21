@@ -4,9 +4,9 @@ use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::ErrorResponse;
 use crate::persistence::entity::login::{LoginDTO, LoginDao};
 use crate::persistence::entity::user::{UserInfoDto, UserLoginDto, UsersDao};
-use crate::persistence::{Error, Transaction};
-use rocket::http::{Cookie, Status};
-use rocket::response::status::BadRequest;
+
+
+
 use uuid::Uuid;
 
 pub struct UserManager<'a> {

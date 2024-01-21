@@ -1,7 +1,7 @@
 use crate::persistence::Error;
 use bcrypt::BcryptError;
 use deadpool::managed::PoolError;
-use rocket::http::Status;
+
 use rocket::Responder;
 
 pub mod plant_manager;

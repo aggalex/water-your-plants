@@ -2,14 +2,14 @@ use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::manager::user_manager::UserManager;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::login::LoginDao;
-use crate::persistence::{Error, Transaction};
+
+use crate::persistence::{Transaction};
 use deadpool_postgres::Pool;
 
 pub async fn dump(db: Pool) {
     let result: Result<(), ErrorResponse> = try {
         let mut manager = db.get().await?;
-        let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+        let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
         let user_manager: UserManager = context.inject();
 

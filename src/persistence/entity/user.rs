@@ -1,6 +1,6 @@
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
-use crate::persistence::entity::plant_profile::PlantProfileDao;
+
 use crate::persistence::{FromRowExtension, QueryResult, Transaction};
 use deadpool_postgres::GenericClient;
 use derive_more::From;

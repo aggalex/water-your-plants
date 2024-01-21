@@ -2,19 +2,19 @@ use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::dto::PaginationDto;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
-use crate::business::manager::plant_manager::PlantManger;
+
 use crate::business::manager::plant_profile_manager::PlantProfileManager;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::plant::{NewPlantDto, PlantDto};
+
 use crate::persistence::entity::plant_profile::{NewPlantProfileDto, PlantProfileDto};
-use crate::persistence::entity::user::{UserLoginDto, UsersDao};
+
 use crate::persistence::Transaction;
 use deadpool_postgres::Pool;
-use rocket::http::{CookieJar, RawStr, Status};
+
 use rocket::serde::json::Json;
-use rocket::{delete, get, post, put, routes, Route, State};
-use std::ops::Deref;
-use uuid::Uuid;
+use rocket::{get, post, routes, Route, State};
+
+
 
 #[post("/", data = "<profile_dto>")]
 async fn create_plant_profile(
@@ -23,7 +23,7 @@ async fn create_plant_profile(
     _logged_in_user_dto: LoggedInUserDTO,
 ) -> Result<Json<PlantProfileDto>, ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let plant_profile_manager: PlantProfileManager = context.inject();
     let info = plant_profile_manager.create_profile(profile_dto.0).await?;
@@ -39,7 +39,7 @@ async fn get_profiles(
     page_size: Option<i64>,
 ) -> Result<Json<Vec<PlantProfileDto>>, ErrorResponse> {
     let mut manager = db.get().await?;
-    let mut context = TransactionContext::new(Transaction::new(&mut manager).await?);
+    let context = TransactionContext::new(Transaction::new(&mut manager).await?);
 
     let pagination_dto = PaginationDto::new_limited(page, page_size)?;
 

@@ -1,7 +1,7 @@
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::dto::PaginationDto;
-use crate::persistence::entity::plant::PlantDao;
+
 use crate::persistence::{FromRowExtension, FromRowsExtension, QueryResult, Transaction};
 use deadpool_postgres::GenericClient;
 use postgres_from_row::FromRow;

@@ -5,7 +5,7 @@ use crate::business::manager::ErrorResponse;
 use crate::persistence::entity::plant_profile::{
     NewPlantProfileDto, PlantProfileDao, PlantProfileDto,
 };
-use crate::persistence::Transaction;
+
 
 pub struct PlantProfileManager<'a> {
     plant_profile_dao: PlantProfileDao<'a>,

@@ -4,7 +4,7 @@ use crate::persistence::entity::login::LoginDao;
 use crate::persistence::Transaction;
 use deadpool_postgres::Pool;
 use rocket::http::Status;
-use rocket::outcome::IntoOutcome;
+
 use rocket::request::{FromRequest, Outcome};
 use rocket::{Request, State, ___internal_try_outcome as try_outcome};
 
@@ -27,7 +27,7 @@ impl<'r> FromRequest<'r> for LoggedInUserDTO {
 
             let db = try_outcome!(request.guard::<&State<Pool>>().await);
             let mut manager = db.get().await.map_err(|_| Status::InternalServerError)?;
-            let mut context = TransactionContext::new(
+            let context = TransactionContext::new(
                 Transaction::new(&mut manager)
                     .await
                     .map_err(|_| Status::InternalServerError)?,
