@@ -1,0 +1,51 @@
+POST 127.0.0.1:8000/user/login
+Content-Type: application/json
+
+{
+  "username": "aggelalex",
+  "password": "123456789"
+}
+
+###
+
+POST 127.0.0.1:8000/profile
+Content-Type: application/json
+
+{
+  "name": "petunia",
+  "max_moisture": 70.0,
+  "min_moisture": 50.0
+}
+
+###
+
+POST 127.0.0.1:8000/profile
+Content-Type: application/json
+
+{
+  "name": "cactus",
+  "max_moisture": 40.0,
+  "min_moisture": 10.0
+}
+
+###
+
+GET 127.0.0.1:8000/profile?page=0
+
+###
+
+POST 127.0.0.1:8000/plant
+Content-Type: application/json
+
+{
+  "name": "my second cactus",
+  "profile_id": 11
+}
+
+###
+
+GET 127.0.0.1:8000/plant?page=0
+
+###
+
+DELETE 127.0.0.1:8000/plant/3

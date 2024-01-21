@@ -6,18 +6,21 @@ use crate::persistence::Error;
 
 pub mod user_manager;
 pub mod plant_manager;
+pub mod plant_profile_manager;
 
 #[derive(Responder, Debug)]
 pub enum ErrorResponse {
     #[response(status = 400, content_type = "json")]
     BadRequest (String),
     #[response(status = 500)]
-    InternalServerError(())
+    InternalServerError(()),
+    #[response(status = 403)]
+    Forbidden (())
 }
 
 impl From<Error> for ErrorResponse {
     fn from(value: Error) -> Self {
-        eprintln!("   >> DB Error: {:?}", value);
+        eprintln!("   >> DB Error: {}", value);
         ErrorResponse::InternalServerError(())
     }
 }

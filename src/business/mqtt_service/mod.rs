@@ -1,18 +1,29 @@
 mod plant;
 
+use tokio::sync::OnceCell;
 use std::ops::{Deref, DerefMut};
+use std::sync::Arc;
 use std::time::Duration;
+use lazy_static::lazy_static;
 use monadic_mqtt::mqtt::event::{PublishEvent, SubscribeEvent};
-use monadic_mqtt::mqtt::Listener;
+use monadic_mqtt::mqtt::{Connection, Listener};
+use monadic_mqtt::mqtt::error::PublishError;
 use rumqttc::v5::MqttOptions;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use client::{ClientEvent, MeasurementDTO};
+use crate::business::cdi::{DefaultContext, Injects};
+use crate::business::manager::ErrorResponse;
+
+lazy_static! {
+    static ref CONN: OnceCell<Arc<Connection>> = OnceCell::new();
+}
 
 pub struct Mqtt {
     pub listener: Listener
 }
 
 impl Mqtt {
+
     pub fn new() -> Mqtt {
         let mut mqttoptions = MqttOptions::new(
             "server",
@@ -28,9 +39,24 @@ impl Mqtt {
     }
 
     pub async fn listen(&mut self) {
+        CONN.set(Arc::from(self.listener.connection().clone())).ok();
+
         self.listener
             .subscribe::<ClientDelegate<MeasurementDTO>>().await
             .listen().await
+    }
+}
+
+impl Injects<'static, Connection> for DefaultContext {
+    fn inject(&'static self) -> Connection {
+        CONN.get().unwrap().deref().clone()
+    }
+}
+
+impl From<PublishError> for ErrorResponse {
+    fn from(value: PublishError) -> Self {
+        eprintln!("Publish error: {value:?}");
+        ErrorResponse::InternalServerError(())
     }
 }
 

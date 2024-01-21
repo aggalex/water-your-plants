@@ -45,7 +45,7 @@ impl<T: Serialize> ClientEvent<T> {
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct WaterRequestDTO {
     pub uuid: String,
-    pub duration: i32,
+    pub set_active: bool,
 }
 
 impl PublishEvent for ClientEvent<MeasurementDTO> {
