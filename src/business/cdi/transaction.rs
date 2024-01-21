@@ -1,17 +1,17 @@
-use std::future::Future;
-use std::ops::Deref;
+use crate::business::cdi::{GlobalContext, Injects};
+use crate::business::manager::ErrorResponse;
+use crate::persistence::{Error, Transaction};
 use deadpool::managed::Object;
 use deadpool_postgres::{Manager, Pool};
 use rocket::http::hyper::body::HttpBody;
 use rocket::http::Status;
 use rocket::outcome::IntoOutcome;
 use rocket::request::FromRequest;
-use crate::business::cdi::{DefaultContext, Injects};
-use crate::business::manager::ErrorResponse;
-use crate::persistence::{Error, Transaction};
+use std::future::Future;
+use std::ops::Deref;
 
 pub struct TransactionContext<'a> {
-    transaction: Transaction<'a>
+    transaction: Transaction<'a>,
 }
 
 impl<'a> TransactionContext<'a> {
@@ -19,22 +19,27 @@ impl<'a> TransactionContext<'a> {
         TransactionContext { transaction }
     }
 
-
     pub async fn commit<R>(self, value: R) -> Result<R, ErrorResponse> {
         self.transaction.commit().await?;
         Ok(value)
     }
 }
 
-impl<'a> Into<DefaultContext> for TransactionContext<'a> {
-    fn into(self) -> DefaultContext {
-        DefaultContext
+impl<'a> Into<GlobalContext> for TransactionContext<'a> {
+    fn into(self) -> GlobalContext {
+        GlobalContext
     }
 }
 
 impl<'a> Injects<'a, &'a Transaction<'a>> for TransactionContext<'a> {
     fn inject(&'a self) -> &'a Transaction<'a> {
         &self.transaction
+    }
+}
+
+impl<'a> Injects<'a, GlobalContext> for TransactionContext<'a> {
+    fn inject(&'a self) -> GlobalContext {
+        GlobalContext
     }
 }
 

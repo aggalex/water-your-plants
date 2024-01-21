@@ -1,39 +1,39 @@
+use crate::context::{num_var, var};
+use lazy_static::lazy_static;
+use reqwest::{Client, Method, Response, Url};
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter};
 use std::sync::Arc;
-use lazy_static::lazy_static;
-use reqwest::{Client, Method, Response, Url};
 use url::ParseError;
-use crate::context::{num_var, var};
 
 pub struct Connection {
     pub server: Url,
     pub http_port: u16,
     pub mqtt_port: u16,
-    pub auth_token: String
+    pub auth_token: String,
 }
 
 pub fn get() -> Arc<Connection> {
     lazy_static! {
         static ref CONNECTION: Arc<Connection> = Arc::new(Connection::new());
     }
-    return CONNECTION.clone()
+    return CONNECTION.clone();
 }
 
 impl Connection {
-
     fn new() -> Self {
         Self {
             server: Url::parse(&var("CONN_SERVER")).expect("Malformed Server URL"),
             http_port: num_var("CONN_HTTP_PORT"),
             mqtt_port: num_var("CONN_MQTT_PORT"),
-            auth_token: var("CONN_AUTH_TOKEN")
+            auth_token: var("CONN_AUTH_TOKEN"),
         }
     }
 
     pub async fn request(&self, method: Method, path: &str) -> Result<Response, RequestError> {
         let client = Client::new();
-        let request = client.request(method, self.server.join(path)?)
+        let request = client
+            .request(method, self.server.join(path)?)
             .header("client_auth", &self.auth_token)
             .build()?;
         Ok(client.execute(request).await?)
@@ -43,7 +43,7 @@ impl Connection {
 #[derive(Debug)]
 pub enum RequestError {
     Url(url::ParseError),
-    Request(reqwest::Error)
+    Request(reqwest::Error),
 }
 
 impl Display for RequestError {
@@ -55,9 +55,7 @@ impl Display for RequestError {
     }
 }
 
-impl Error for RequestError {
-
-}
+impl Error for RequestError {}
 
 impl From<reqwest::Error> for RequestError {
     fn from(value: reqwest::Error) -> Self {

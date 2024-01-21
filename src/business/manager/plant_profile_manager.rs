@@ -1,32 +1,45 @@
-use crate::business::cdi::Injects;
 use crate::business::cdi::transaction::TransactionContext;
+use crate::business::cdi::Injects;
 use crate::business::dto::PaginationDto;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::plant_profile::{NewPlantProfileDto, PlantProfileDao, PlantProfileDto};
+use crate::persistence::entity::plant_profile::{
+    NewPlantProfileDto, PlantProfileDao, PlantProfileDto,
+};
 use crate::persistence::Transaction;
 
 pub struct PlantProfileManager<'a> {
-    plant_profile_dao: PlantProfileDao<'a>
+    plant_profile_dao: PlantProfileDao<'a>,
 }
 
 impl<'a> Injects<'a, PlantProfileManager<'a>> for TransactionContext<'a> {
     fn inject(&'a self) -> PlantProfileManager<'a> {
-        let transaction: &Transaction = self.inject();
         PlantProfileManager {
-            plant_profile_dao: transaction.into()
+            plant_profile_dao: self.inject(),
         }
     }
 }
 
 impl PlantProfileManager<'_> {
-    pub async fn get_profiles(&self, query: Option<String>, pagination_dto: PaginationDto) -> Result<Vec<PlantProfileDto>, ErrorResponse> {
-        let profiles = self.plant_profile_dao
-            .search(query.as_ref().map(|str| &str[..]), &pagination_dto).await?;
+    pub async fn get_profiles(
+        &self,
+        query: Option<String>,
+        pagination_dto: PaginationDto,
+    ) -> Result<Vec<PlantProfileDto>, ErrorResponse> {
+        let profiles = self
+            .plant_profile_dao
+            .search(query.as_ref().map(|str| &str[..]), &pagination_dto)
+            .await?;
         Ok(profiles)
     }
 
-    pub async fn create_profile(&self, new_plant_profile_dto: NewPlantProfileDto) -> Result<PlantProfileDto, ErrorResponse> {
-        let profile = self.plant_profile_dao.create(&new_plant_profile_dto).await?;
+    pub async fn create_profile(
+        &self,
+        new_plant_profile_dto: NewPlantProfileDto,
+    ) -> Result<PlantProfileDto, ErrorResponse> {
+        let profile = self
+            .plant_profile_dao
+            .create(&new_plant_profile_dto)
+            .await?;
         Ok(profile)
     }
 }

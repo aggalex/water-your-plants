@@ -1,14 +1,14 @@
+use crate::business::cdi::GlobalContext;
+use crate::persistence::Transaction;
 use deadpool_postgres::Pool;
 use monadic_mqtt::mqtt::Connection;
-use rocket::{Rocket, routes};
 use rocket::request::FromRequest;
-use crate::business::cdi::DefaultContext;
-use crate::persistence::Transaction;
+use rocket::{routes, Rocket};
 
 pub mod middleware;
-mod user;
 mod plant;
 mod plant_profile;
+mod user;
 
 pub async fn http(db: Pool, mqtt: Connection) {
     Rocket::build()
@@ -17,5 +17,7 @@ pub async fn http(db: Pool, mqtt: Connection) {
         .mount("/user", user::routes())
         .mount("/plant", plant::routes())
         .mount("/profile", plant_profile::routes())
-        .launch().await.unwrap();
+        .launch()
+        .await
+        .unwrap();
 }

@@ -1,21 +1,21 @@
+use crate::persistence::Error;
 use bcrypt::BcryptError;
 use deadpool::managed::PoolError;
 use rocket::http::Status;
 use rocket::Responder;
-use crate::persistence::Error;
 
-pub mod user_manager;
 pub mod plant_manager;
 pub mod plant_profile_manager;
+pub mod user_manager;
 
 #[derive(Responder, Debug)]
 pub enum ErrorResponse {
     #[response(status = 400, content_type = "json")]
-    BadRequest (String),
+    BadRequest(String),
     #[response(status = 500)]
     InternalServerError(()),
     #[response(status = 403)]
-    Forbidden (())
+    Forbidden(()),
 }
 
 impl From<Error> for ErrorResponse {

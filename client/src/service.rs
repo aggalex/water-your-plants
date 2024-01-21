@@ -1,10 +1,10 @@
+use crate::context::hardware;
+use crate::{context, ClientEvent, Error, MeasurementDTO, WaterRequestDTO};
+use monadic_mqtt::mqtt::event::{PublishEvent, SubscribeEvent};
+use rppal::hal::Delay;
+use rppal::{gpio, spi};
 use std::future::Future;
 use std::time::Duration;
-use monadic_mqtt::mqtt::event::{PublishEvent, SubscribeEvent};
-use rppal::{gpio, spi};
-use rppal::hal::Delay;
-use crate::{ClientEvent, context, Error, MeasurementDTO, WaterRequestDTO};
-use crate::context::hardware;
 impl From<gpio::Error> for Error {
     fn from(_: gpio::Error) -> Self {
         Error::HardwareError
@@ -24,7 +24,6 @@ impl<E> From<dht11::Error<E>> for Error {
 }
 
 impl SubscribeEvent for WaterRequestDTO {
-
     type Error = Error;
 
     fn invoke(&self) -> impl Future<Output = Result<Self::Response, Self::Error>> {
@@ -32,7 +31,7 @@ impl SubscribeEvent for WaterRequestDTO {
         let duration = Duration::from_secs(self.duration as u64);
         async move {
             if uuid != context::uuid().await {
-                return Ok(())
+                return Ok(());
             }
 
             let hardware = context::hardware::get();
@@ -61,8 +60,10 @@ pub fn measure() -> Result<MeasurementDTO, Error> {
 
 pub async fn measurement_service(conn: monadic_mqtt::mqtt::Connection) {
     loop {
-        ClientEvent::from(measure().unwrap_or_else(|e| MeasurementDTO::Error(e))).await
-            .publish(conn.clone()).await
+        ClientEvent::from(measure().unwrap_or_else(|e| MeasurementDTO::Error(e)))
+            .await
+            .publish(conn.clone())
+            .await
             .unwrap_or_else(|e| eprintln!("Unable to publish measurement: {:?}", e));
         tokio::time::sleep(Duration::from_secs(1)).await;
     }

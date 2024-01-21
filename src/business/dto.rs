@@ -1,9 +1,9 @@
-use serde::Deserialize;
 use crate::business::manager::ErrorResponse;
+use serde::Deserialize;
 
 pub struct PaginationDto {
     pub page: i64,
-    pub page_size: i64
+    pub page_size: i64,
 }
 
 impl PaginationDto {
@@ -11,13 +11,10 @@ impl PaginationDto {
         let page_size = page_size.unwrap_or(10);
 
         if page_size > 30 {
-            return Err(ErrorResponse::BadRequest("page size too big".to_string()))
+            return Err(ErrorResponse::BadRequest("page size too big".to_string()));
         }
 
-        Ok(PaginationDto {
-            page,
-            page_size,
-        })
+        Ok(PaginationDto { page, page_size })
     }
 
     pub fn offset(&self) -> i64 {

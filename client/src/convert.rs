@@ -1,4 +1,4 @@
-use rppal::spi::{Bus, SlaveSelect, Mode};
+use rppal::spi::{Bus, Mode, SlaveSelect};
 
 pub trait IntoEnum<Target> {
     fn cast(self) -> Target;
@@ -14,7 +14,7 @@ impl IntoEnum<Bus> for u64 {
             4 => Bus::Spi4,
             5 => Bus::Spi5,
             6 => Bus::Spi6,
-            n => panic!("Invalid value {n}")
+            n => panic!("Invalid value {n}"),
         }
     }
 }
@@ -38,7 +38,7 @@ impl IntoEnum<SlaveSelect> for u64 {
             13 => SlaveSelect::Ss13,
             14 => SlaveSelect::Ss14,
             15 => SlaveSelect::Ss15,
-            n => panic!("Invalid value {n}")
+            n => panic!("Invalid value {n}"),
         }
     }
 }
@@ -50,7 +50,7 @@ impl IntoEnum<Mode> for u64 {
             1 => Mode::Mode1,
             2 => Mode::Mode2,
             3 => Mode::Mode3,
-            n => panic!("Invalid value {n}")
+            n => panic!("Invalid value {n}"),
         }
     }
 }

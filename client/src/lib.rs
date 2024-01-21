@@ -5,15 +5,15 @@ use monadic_mqtt::mqtt::event::PublishEvent;
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "bin")]
-pub mod service;
-#[cfg(feature = "bin")]
 pub mod context;
 #[cfg(feature = "bin")]
 mod convert;
+#[cfg(feature = "bin")]
+pub mod service;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Error {
-    HardwareError
+    HardwareError,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -22,14 +22,14 @@ pub enum MeasurementDTO {
     Measurement {
         moisture: f32,
         temperature: f32,
-        humidity: f32
-    }
+        humidity: f32,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientEvent<T: Serialize> {
     pub uuid: String,
-    pub event: T
+    pub event: T,
 }
 
 #[cfg(feature = "bin")]
