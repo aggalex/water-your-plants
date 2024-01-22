@@ -35,8 +35,10 @@ pub struct ClientEvent<T: Serialize> {
 #[cfg(feature = "bin")]
 impl<T: Serialize> ClientEvent<T> {
     pub async fn from(value: T) -> ClientEvent<T> {
+        use crate::context::uuid;
+
         ClientEvent {
-            uuid: uuid().await,
+            uuid: uuid().await.to_string(),
             event: value,
         }
     }

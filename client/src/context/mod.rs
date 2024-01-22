@@ -1,32 +1,16 @@
 use lazy_static::lazy_static;
-use reqwest::Method;
 use std::error::Error;
-use tokio::sync::RwLock;
+use tokio::sync::{OnceCell, RwLock};
 
 pub mod connection;
 pub mod hardware;
 
-lazy_static! {
-    static ref UUID: RwLock<String> = RwLock::new("".to_string());
-}
+pub async fn uuid() -> &'static str {
+    lazy_static! {
+        static ref UUID: OnceCell<String> = OnceCell::new();
+    }
 
-pub async fn uuid() -> String {
-    UUID.read().await.clone()
-}
-
-pub async fn set_uuid(uuid: String) {
-    *UUID.write().await = uuid;
-}
-
-pub async fn fetch_uuid() -> Result<(), Box<dyn Error>> {
-    let response = connection::get()
-        .request(Method::POST, "/node/register")
-        .await?;
-    set_uuid(serde_json::from_str(&String::from_utf8(
-        response.bytes().await?.to_vec(),
-    )?)?)
-    .await;
-    Ok(())
+    UUID.get_or_init(|| async { var("PLANT_UUID") }).await
 }
 
 pub(self) fn num_var<X: TryFrom<u64>>(var_name: &str) -> X {
