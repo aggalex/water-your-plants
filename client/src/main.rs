@@ -27,6 +27,7 @@ async fn main() {
         &connection.mqtt_server.host().expect("MQTT Server is missing host").to_string(),
         connection.mqtt_server.port().unwrap_or(1883),
     );
+    mqttoptions.set_credentials(&connection.mqtt_username, &connection.mqtt_password);
     mqttoptions.set_keep_alive(Duration::from_secs(5));
 
     let mut listener = Listener::new(mqttoptions, 10);

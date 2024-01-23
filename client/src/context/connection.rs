@@ -8,6 +8,8 @@ use url::{ParseError, Url};
 pub struct Connection {
     pub http_server: Url,
     pub mqtt_server: Url,
+    pub mqtt_username: String,
+    pub mqtt_password: String
 }
 
 pub fn get() -> Arc<Connection> {
@@ -22,6 +24,8 @@ impl Connection {
         Self {
             http_server: Url::parse(&var("CONN_HTTP_SERVER")).expect("Malformed HTTP Server URL"),
             mqtt_server: Url::parse(&var("CONN_MQTT_SERVER")).expect("Malformed MQTT Server URL"),
+            mqtt_username: var("CONN_MQTT_USERNAME"),
+            mqtt_password: var("CONN_MQTT_PASSWORD")
         }
     }
 }

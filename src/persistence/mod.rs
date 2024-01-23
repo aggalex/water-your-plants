@@ -1,6 +1,4 @@
 pub mod entity;
-mod query_builder;
-
 use deadpool::managed::Object;
 use deadpool_postgres::{GenericClient, Manager, PoolError};
 use postgres_from_row::FromRow;

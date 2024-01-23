@@ -5,6 +5,8 @@ use rppal::hal::Delay;
 use rppal::{gpio, spi};
 use std::future::Future;
 use std::time::Duration;
+use rppal::gpio::Gpio;
+
 impl From<gpio::Error> for Error {
     fn from(_: gpio::Error) -> Self {
         Error::HardwareError
@@ -35,6 +37,7 @@ impl SubscribeEvent for WaterRequestDTO {
 
             let hardware = context::hardware::get();
             let mut valve = hardware.solenoid_valve()?;
+            valve.set_reset_on_drop(false);
 
             if self.set_active {
                 valve.set_high();

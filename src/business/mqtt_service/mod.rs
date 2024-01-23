@@ -32,6 +32,10 @@ impl Mqtt {
                 .parse()
                 .expect("Malformed MQTT Broker port"),
         );
+        mqttoptions.set_credentials(
+            std::env::var("MQTT_BROKER_USER").expect("Missing MQTT username"),
+            std::env::var("MQTT_BROKER_PASSWORD").expect("Missing MQTT password")
+        );
         mqttoptions.set_keep_alive(Duration::from_secs(5));
 
         Mqtt {
