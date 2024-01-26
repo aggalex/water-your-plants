@@ -1,4 +1,4 @@
-pub mod entity;
+pub mod dao;
 use deadpool::managed::Object;
 use deadpool_postgres::{GenericClient, Manager, PoolError};
 use postgres_from_row::FromRow;

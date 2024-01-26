@@ -20,6 +20,7 @@ pub struct PlantDto {
     pub soil_moisture: f32,
 }
 
+
 #[derive(Deserialize, Clone, FromRow)]
 pub struct NewPlantDto {
     pub name: String,

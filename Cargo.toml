@@ -22,6 +22,7 @@ deadpool-postgres = "0.12.1"
 deadpool = "0.10.0"
 derive_more = { version = "1.0.0-beta.6", features = ["full"] }
 rocket = { version = "0.5.0", features = ["secrets", "serde_json", "json", "rmp-serde"] }
+rocket_cors = "0.6.0"
 uuid = { version = "1.6.1", features = ["v4"] }
 bcrypt = "0.15.0"
 lazy_static = "1.4.0"

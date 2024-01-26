@@ -1,9 +1,10 @@
+use tokio_postgres::types::ToSql;
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::login::{LoginDTO, LoginDao};
-use crate::persistence::entity::user::{UserInfoDto, UserLoginDto, UsersDao};
+use crate::persistence::dao::login::{LoginDTO, LoginDao};
+use crate::persistence::dao::user::{UserInfoDto, UserLoginDto, UsersDao};
 
 
 

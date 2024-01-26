@@ -2,7 +2,7 @@ use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
 use crate::business::dto::PaginationDto;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::plant_profile::{
+use crate::persistence::dao::plant_profile::{
     NewPlantProfileDto, PlantProfileDao, PlantProfileDto,
 };
 

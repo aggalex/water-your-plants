@@ -4,8 +4,8 @@ use crate::business::dto::PaginationDto;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
 
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::plant::{NewPlantDto, PlantDao, PlantDto};
-use crate::persistence::entity::plant_profile::PlantProfileDao;
+use crate::persistence::dao::plant::{NewPlantDto, PlantDao, PlantDto};
+use crate::persistence::dao::plant_profile::PlantProfileDao;
 
 use client::{MeasurementDTO, WaterRequestDTO};
 use monadic_mqtt::mqtt::event::PublishEvent;

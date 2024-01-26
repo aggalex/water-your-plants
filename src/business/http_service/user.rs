@@ -9,7 +9,7 @@ use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::user_manager::UserManager;
 use crate::business::manager::ErrorResponse;
 
-use crate::persistence::entity::user::{UserInfoDto, UserLoginDto};
+use crate::persistence::dao::user::{UserInfoDto, UserLoginDto};
 use crate::persistence::Transaction;
 
 

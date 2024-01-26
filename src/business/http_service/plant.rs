@@ -4,7 +4,7 @@ use crate::business::dto::PaginationDto;
 use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::plant_manager::PlantManger;
 use crate::business::manager::ErrorResponse;
-use crate::persistence::entity::plant::{NewPlantDto, PlantDto};
+use crate::persistence::dao::plant::{NewPlantDto, PlantDto};
 
 use crate::persistence::Transaction;
 use deadpool_postgres::Pool;

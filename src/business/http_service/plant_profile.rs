@@ -6,7 +6,7 @@ use crate::business::http_service::middleware::login::LoggedInUserDTO;
 use crate::business::manager::plant_profile_manager::PlantProfileManager;
 use crate::business::manager::ErrorResponse;
 
-use crate::persistence::entity::plant_profile::{NewPlantProfileDto, PlantProfileDto};
+use crate::persistence::dao::plant_profile::{NewPlantProfileDto, PlantProfileDto};
 
 use crate::persistence::Transaction;
 use deadpool_postgres::Pool;

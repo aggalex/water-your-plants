@@ -1,6 +1,6 @@
 use crate::business::cdi::transaction::TransactionContext;
 use crate::business::cdi::Injects;
-use crate::persistence::entity::login::LoginDao;
+use crate::persistence::dao::login::LoginDao;
 use crate::persistence::Transaction;
 use deadpool_postgres::Pool;
 use rocket::http::Status;
